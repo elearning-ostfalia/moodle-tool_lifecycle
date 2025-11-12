@@ -56,7 +56,11 @@ class adminapprove extends libbase {
         $record = new \stdClass();
         $record->processid = $processid;
         $record->status = 0;
-        $DB->insert_record('lifecyclestep_adminapprove', $record);
+        $status = $DB->get_field('lifecyclestep_adminapprove', 'status', array('processid' => $processid));
+        if ($status === false) {
+            // Insert only if it does not exist.
+            $DB->insert_record('lifecyclestep_adminapprove', $record);
+        }
         self::$newcourses++;
         return step_response::waiting();
     }
