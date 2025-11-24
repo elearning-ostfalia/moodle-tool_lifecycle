@@ -184,6 +184,7 @@ class processor {
             while (true) {
 
                 $course = get_course($process->courseid);
+                echo 'Process courses: Handle course "' . $course->id . '<br>' . PHP_EOL;
 
                 if ($process->stepindex == 0) {
                     if (!process_manager::proceed_process($process)) {
@@ -204,17 +205,28 @@ class processor {
                     }
                     $coursesprocessed++;
                 } catch (\Exception $e) {
+                    echo 'Process courses: Handle error for course "' . $course->id . '/' . $process->id . '<br>' . PHP_EOL;
                     process_manager::insert_process_error($process, $e);
                     $coursesprocesserrors++;
                     break;
                 }
+
                 if ($result == step_response::waiting()) {
                     process_manager::set_process_waiting($process);
                     if ($debug) {
                         echo \html_writer::div("Course processed: $course->id - Result: Waiting");
                     }
                     break;
-                } else if ($result == step_response::proceed()) {
+                }
+                if ($result->get_value() == step_response::proceed_with_new_course(null)->get_value()) {
+                    // Special case for continuing with a different course after duplicating courses (duplicate2).
+                    // The process object is not available in step processing for writing.
+                    // So the new course must be returned from step and handling in this level.
+                    $process->courseid = $result->get_new_course_id();
+                    // Kind of fallthrough: continiue with default proceed handling
+                    $result = step_response::proceed();
+                }
+                if ($result == step_response::proceed()) {
                     if (!process_manager::proceed_process($process)) {
                         delayed_courses_manager::set_course_delayed_for_workflow($course->id,
                             false, $process->workflowid);
@@ -223,7 +235,8 @@ class processor {
                         echo \html_writer::div("Course processed: $course->id - Result: Proceed");
                     }
                     break;
-                } else if ($result == step_response::rollback()) {
+                }
+                if ($result == step_response::rollback()) {
                     delayed_courses_manager::set_course_delayed_for_workflow($course->id,
                         true, $process->workflowid);
                     process_manager::rollback_process($process);
@@ -231,9 +244,8 @@ class processor {
                         echo \html_writer::div("Course processed: $course->id - Result: Rollback");
                     }
                     break;
-                } else {
-                    throw new \moodle_exception('Return code \''. var_dump($result) . '\' is not allowed!');
                 }
+                throw new \moodle_exception('Return code \''. var_dump($result) . '\' is not allowed!');
             }
         }
         if (!$automatictest) {

@@ -34,6 +34,8 @@ class step_response {
 
     /** @var string Proceed the workflow to the next step. */
     const PROCEED = 'proceed';
+    /** @var string Proceed the workflow to the next step but with new course (after duplicate) . */
+    const NEW_COURSE= 'newcourse';
     /** @var string The step is still processing the course and probably waiting for some interaction. */
     const WAITING = 'waiting';
     /** @var string The process should be rolled back. */
@@ -42,12 +44,24 @@ class step_response {
     /** @var string Value of the response. */
     private $value;
 
+    /** @var string Process with new course. */
+    private $newcourseid;
+
     /**
      * Creates an instance of a SubpluginResponse
      * @param string $responsetype code of the response
      */
-    private function __construct($responsetype) {
+    private function __construct($responsetype, $newcourseid = null) {
         $this->value = $responsetype;
+        $this->newcourseid = $newcourseid;
+    }
+
+    public function get_new_course_id() {
+        return $this->newcourseid;
+    }
+
+    public function get_value() {
+        return $this->value;
     }
 
     /**
@@ -55,6 +69,13 @@ class step_response {
      */
     public static function proceed() {
         return new step_response(self::PROCEED);
+    }
+
+    /**
+     * Creates a step_response telling that the subplugin finished processing the course.
+     */
+    public static function proceed_with_new_course($newcourseid) {
+        return new step_response(self::NEW_COURSE, $newcourseid);
     }
 
     /**
@@ -70,7 +91,4 @@ class step_response {
     public static function rollback() {
         return new step_response(self::ROLLBACK);
     }
-
-
-
 }
