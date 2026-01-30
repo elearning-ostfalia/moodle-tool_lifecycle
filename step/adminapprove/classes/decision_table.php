@@ -349,9 +349,9 @@ class decision_table extends \table_sql {
 
     /**
      * add link for showing complete table
-     * @param $pagesize
-     * @param $useinitialsbar
-     * @param $downloadhelpbutton
+     * @param int $pagesize
+     * @param boolean $useinitialsbar
+     * @param string $downloadhelpbutton
      * @return void
      * @throws \coding_exception
      * @throws moodle_exception

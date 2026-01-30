@@ -48,11 +48,11 @@ class approvestep_form extends \moodleform {
 
     /**
      * constructor
-     * @param $stepid
-     * @param $courseid
-     * @param $category
-     * @param $coursename
-     * @param $pagesize
+     * @param int $stepid step id
+     * @param int $courseid course id
+     * @param int $category course category
+     * @param string $coursename course name
+     * @param int $pagesize page size
      */
     public function __construct($stepid, $courseid, $category, $coursename, $pagesize = 0) {
         $this->stepid = $stepid;
@@ -132,6 +132,6 @@ class approvestep_form extends \moodleform {
         // Since we have more than one form on the page (filter form and this form) a submission runs into a warning
         // because of unsaved data in the other form. In order to suppress this message we disable
         // all checks for form changes.
-        $PAGE->requires->js_call_amd('lifecyclestep_adminapprove/util', 'disableFormChangeChecks');
+        $PAGE->requires->js_call_amd('core_form/changechecker', 'disableAllChecks');
     }
 }
