@@ -116,13 +116,11 @@ class decision_table extends \table_sql {
             'checked' => false,
         ]);
 
-        // $this->define_baseurl("/admin/tool/lifecycle/step/adminapprove/approvestep.php?stepid=$stepid");
         $this->define_columns(['checkbox', 'courseid', 'course', 'category', 'startdate', 'tools']);
         $this->column_class('tools', 'text-nowrap');
         global $OUTPUT;
         $this->define_headers(
             [$OUTPUT->render($this->_mastercheckbox),
-                //[\html_writer::checkbox('checkall', null, false),
                         get_string('courseid', 'lifecyclestep_adminapprove'),
                         get_string('course'),
                         get_string('category'),
@@ -185,9 +183,6 @@ class decision_table extends \table_sql {
         ]);
 
         return $OUTPUT->render($checkbox);
-
-        /*
-        return \html_writer::checkbox('c[]', $row->id, false); */
     }
 
     /**
@@ -352,6 +347,15 @@ class decision_table extends \table_sql {
         echo $output;
     }
 
+    /**
+     * add link for showing complete table
+     * @param $pagesize
+     * @param $useinitialsbar
+     * @param $downloadhelpbutton
+     * @return void
+     * @throws \coding_exception
+     * @throws moodle_exception
+     */
     public function out($pagesize, $useinitialsbar, $downloadhelpbutton = '') {
         if ($pagesize < 1) {
             $pagesize = $this->get_default_per_page();
@@ -379,4 +383,12 @@ class decision_table extends \table_sql {
 
     }
 
+    /**
+     * Get the default per page.
+     *
+     * @return int
+     */
+    public function get_default_per_page(): int {
+        return 100;
+    }
 }

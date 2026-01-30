@@ -188,48 +188,9 @@ if ($hasrecords) {
     echo \html_writer::span(get_string('courses'));
     echo '</div>';
 
-
-    $rollbackallcustlabel =
-        settings_manager::get_settings($stepid, settings_type::STEP)['rollbackallbuttonlabel'] ?? null;
-    $rollbackallcustlabel = !empty($rollbackallcustlabel) ?
-        $rollbackallcustlabel : get_string('rollbackall', 'lifecyclestep_adminapprove');
-
-    $proceedallcustlabel =
-        settings_manager::get_settings($stepid, settings_type::STEP)['proceedallbuttonlabel'] ?? null;
-    $proceedallcustlabel = !empty($proceedallcustlabel) ?
-        $proceedallcustlabel : get_string('proceedall', 'lifecyclestep_adminapprove');
-
-    $button = new \single_button(
-        new \moodle_url('', [
-            'action' => 'rollback_all',
-            'stepid' => $stepid,
-            // TODO: 'stepindex' => $this->stepindex,
-            'wfid' => $workflow->id,
-            'sesskey' => sesskey(),
-        ]),
-        $rollbackallcustlabel,
-        'post',
-        single_button::BUTTON_SECONDARY
-    );
-    global $OUTPUT;
-    echo $OUTPUT->render($button);
-
-    $button = new \single_button(
-        new \moodle_url('', [
-            'action' => 'proceed_all',
-            'stepid' => $stepid,
-            // TODO: 'stepindex' => $this->stepindex,
-            'wfid' => $workflow->id,
-            'sesskey' => sesskey(),
-        ]),
-        $proceedallcustlabel,
-        'post',
-        single_button::BUTTON_PRIMARY
-    );
-    echo $OUTPUT->render($button);
-
     $mform = new approvestep_form($stepid, $courseid, $category, $coursename, $pagesize);
     $mform->display();
+
 } else {
     echo get_string('no_courses_waiting', 'lifecyclestep_adminapprove',
             ['step' => $step->instancename, 'workflow' => $workflow->title]);
