@@ -65,4 +65,5 @@ $string['statusmessage'] = 'Status message';
 $string['statusmessage_help'] = 'Status message, which is displayed to a teacher, if a process of a course is at this admin approve step.';
 $string['statusmessagedefault'] = 'In Admin Approve step';
 $string['tools'] = 'Tools';
+$string['withselectedcourses'] = 'With selected courses... ';
 $string['workflow'] = 'Workflow';

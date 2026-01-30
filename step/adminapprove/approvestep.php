@@ -23,13 +23,15 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use core\output\single_button;
+use lifecyclestep_adminapprove\approvestep_form;
 use lifecyclestep_adminapprove\course_filter_form;
 use tool_lifecycle\local\manager\settings_manager;
 use tool_lifecycle\local\manager\step_manager;
 use tool_lifecycle\local\manager\workflow_manager;
 use tool_lifecycle\settings_type;
 use tool_lifecycle\tabs;
-use tool_lifecycle\urls;
+
 
 require_once(__DIR__ . '/../../../../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
@@ -40,9 +42,11 @@ require_capability('moodle/site:config', context_system::instance());
 
 $action = optional_param('action', null, PARAM_ALPHANUMEXT);
 $ids = optional_param_array('c', [], PARAM_INT);
+$checkboxes = optional_param_array('checkbox', [], PARAM_INT);
 $stepid = required_param('stepid', PARAM_INT);
 $wfid = optional_param('wfid', null, PARAM_INT);
 $stepindex = optional_param('stepindex', null, PARAM_INT);
+$pagesize = optional_param('perpage', 0, PARAM_INT);
 
 $syscontext = context_system::instance();
 $PAGE->set_url(new \moodle_url("/admin/tool/lifecycle/step/adminapprove/approvestep.php?stepid=$stepid"));
@@ -56,6 +60,11 @@ if (!$step) {
 }
 if ($step->subpluginname !== 'adminapprove') {
     throw new moodle_exception('The given step is not a Admin Approve Step.');
+}
+
+if (count($checkboxes) > 0) {
+    // Use checkbox ids instead of single button id.
+    $ids = $checkboxes;
 }
 
 /**
@@ -110,17 +119,15 @@ if ($action) {
     $message = "";
 
     if ($action == PROCEED_ALL || $action == ROLLBACK_ALL) {
+        // Here we might update more records than have been shown to user.
         $subselect = 'SELECT id FROM {tool_lifecycle_process} WHERE workflowid = :wfid AND stepindex = :stepindex';
         $params = ['wfid' => $wfid, 'stepindex' => $stepindex];
         $sql = 'UPDATE {lifecyclestep_adminapprove} ' .
             'SET status = ' . ($action == PROCEED_ALL ? 1 : 2) . ' ' .
             'WHERE processid IN (' . $subselect . ') ' .
             'AND status = 0';
-        try {
-            $DB->execute($sql, $params);
-        } catch (dml_exception $e) {
-            throw $e;
-        }
+        global $DB;
+        $DB->execute($sql, $params);
 
         $a = new stdClass();
         $step = step_manager::get_step_instance_by_workflow_index($wfid, $stepindex);
@@ -181,10 +188,48 @@ if ($hasrecords) {
     echo \html_writer::span(get_string('courses'));
     echo '</div>';
 
-    $table = new lifecyclestep_adminapprove\decision_table($stepid, $courseid, $category, $coursename);
-    $table->out(100, false);
 
-    $PAGE->requires->js_call_amd('lifecyclestep_adminapprove/init', 'init', [$table->totalrows]);
+    $rollbackallcustlabel =
+        settings_manager::get_settings($stepid, settings_type::STEP)['rollbackallbuttonlabel'] ?? null;
+    $rollbackallcustlabel = !empty($rollbackallcustlabel) ?
+        $rollbackallcustlabel : get_string('rollbackall', 'lifecyclestep_adminapprove');
+
+    $proceedallcustlabel =
+        settings_manager::get_settings($stepid, settings_type::STEP)['proceedallbuttonlabel'] ?? null;
+    $proceedallcustlabel = !empty($proceedallcustlabel) ?
+        $proceedallcustlabel : get_string('proceedall', 'lifecyclestep_adminapprove');
+
+    $button = new \single_button(
+        new \moodle_url('', [
+            'action' => 'rollback_all',
+            'stepid' => $stepid,
+            // TODO: 'stepindex' => $this->stepindex,
+            'wfid' => $workflow->id,
+            'sesskey' => sesskey(),
+        ]),
+        $rollbackallcustlabel,
+        'post',
+        single_button::BUTTON_SECONDARY
+    );
+    global $OUTPUT;
+    echo $OUTPUT->render($button);
+
+    $button = new \single_button(
+        new \moodle_url('', [
+            'action' => 'proceed_all',
+            'stepid' => $stepid,
+            // TODO: 'stepindex' => $this->stepindex,
+            'wfid' => $workflow->id,
+            'sesskey' => sesskey(),
+        ]),
+        $proceedallcustlabel,
+        'post',
+        single_button::BUTTON_PRIMARY
+    );
+    echo $OUTPUT->render($button);
+
+    $mform = new approvestep_form($stepid, $courseid, $category, $coursename, $pagesize);
+    $mform->display();
 } else {
     echo get_string('no_courses_waiting', 'lifecyclestep_adminapprove',
             ['step' => $step->instancename, 'workflow' => $workflow->title]);

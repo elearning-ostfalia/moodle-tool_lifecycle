@@ -61,6 +61,9 @@ class decision_table extends \table_sql {
      */
     private $stepindex;
 
+    /** @var object master checkbox object */
+    private $_mastercheckbox;
+
     /**
      * Constructs the table.
      * @param int $stepid
@@ -104,11 +107,22 @@ class decision_table extends \table_sql {
         $this->strings['proceedallbuttonlabel'] = !empty($proceedallcustlabel) ?
             $proceedallcustlabel : get_string('proceedall', 'lifecyclestep_adminapprove');
 
-        $this->define_baseurl("/admin/tool/lifecycle/step/adminapprove/approvestep.php?stepid=$stepid");
+        $this->_mastercheckbox = new \core\output\checkbox_toggleall('lifecycle-adminapprove-table', true, [
+            'id' => 'select-all-ids',
+            'name' => 'select-all-ids',
+            'label' => get_string('selectall'),
+            'labelclasses' => 'sr-only',
+            'classes' => 'm-1',
+            'checked' => false,
+        ]);
+
+        // $this->define_baseurl("/admin/tool/lifecycle/step/adminapprove/approvestep.php?stepid=$stepid");
         $this->define_columns(['checkbox', 'courseid', 'course', 'category', 'startdate', 'tools']);
         $this->column_class('tools', 'text-nowrap');
+        global $OUTPUT;
         $this->define_headers(
-                [\html_writer::checkbox('checkall', null, false),
+            [$OUTPUT->render($this->_mastercheckbox),
+                //[\html_writer::checkbox('checkall', null, false),
                         get_string('courseid', 'lifecyclestep_adminapprove'),
                         get_string('course'),
                         get_string('category'),
@@ -148,13 +162,32 @@ class decision_table extends \table_sql {
      * @return string
      */
     public function col_checkbox($row) {
+        global $OUTPUT;
+
         if (!($this->wfid ?? false)) {
             $this->wfid = $row->wfid;
         }
         if (!($this->stepindex ?? false)) {
             $this->stepindex = $row->stepindex;
         }
-        return \html_writer::checkbox('c[]', $row->id, false);
+
+        $name = $row->id;
+
+        $checkbox = new \core\output\checkbox_toggleall('lifecycle-adminapprove-table', false, [
+            'id' => 'adminapprove_check_' . $name,
+            'name' => 'checkbox[]',
+            'label' => get_string('selectitem', 'moodle', $row->id),
+            'labelclasses' => 'accesshide',
+            'classes' => 'm-1',
+            'checked' => false,
+            'value' => $name,
+            'labelfor' => 'adminapprove_check_' . $name,
+        ]);
+
+        return $OUTPUT->render($checkbox);
+
+        /*
+        return \html_writer::checkbox('c[]', $row->id, false); */
     }
 
     /**
@@ -263,6 +296,7 @@ class decision_table extends \table_sql {
         global $OUTPUT;
 
         parent::wrap_html_start();
+        return;
 
         $output = \html_writer::empty_tag('input',
             [
@@ -316,6 +350,33 @@ class decision_table extends \table_sql {
         $output .= $OUTPUT->render($button);
 
         echo $output;
+    }
+
+    public function out($pagesize, $useinitialsbar, $downloadhelpbutton = '') {
+        if ($pagesize < 1) {
+            $pagesize = $this->get_default_per_page();
+        }
+        parent::out($pagesize, $useinitialsbar, $downloadhelpbutton);
+
+        // Generate "Show all/Show per page" link.
+        if ($this->pagesize == TABLE_SHOW_ALL_PAGE_SIZE && $this->totalrows > $this->get_default_per_page()) {
+            $perpagesize = $this->get_default_per_page();
+            $perpagestring = get_string('showperpage', '', $this->get_default_per_page());
+        } else if ($this->pagesize < $this->totalrows) {
+            $perpagesize = TABLE_SHOW_ALL_PAGE_SIZE;
+            $perpagestring = get_string('showall', '', $this->totalrows);
+        }
+        if (isset($perpagesize) && isset($perpagestring)) {
+            global $PAGE;
+            $perpageurl = new \moodle_url($PAGE->url);
+            $perpageurl->remove_params('page'); // Reset page parameter.
+            $perpageurl->param('page', 0); // Reset page parameter.
+            $perpageurl->param('perpage', $perpagesize);
+            echo \html_writer::link(
+                $perpageurl,
+                $perpagestring);
+        }
 
     }
+
 }

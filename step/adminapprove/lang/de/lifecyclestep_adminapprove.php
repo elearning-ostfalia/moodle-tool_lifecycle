@@ -64,4 +64,5 @@ $string['statusmessage'] = 'Statusnachricht';
 $string['statusmessage_help'] = 'Statusnachricht, welche dem Lehrer angezeigt wird, wenn ein Prozess eines Kurses den Adminbestätigungs-Schritt bearbeitet.';
 $string['statusmessagedefault'] = 'In Admin-Bestätigungs-Schritt';
 $string['tools'] = 'Aktionen';
+$string['withselectedcourses'] = 'Für ausgewählte Kurse... ';
 $string['workflow'] = 'Workflow';
