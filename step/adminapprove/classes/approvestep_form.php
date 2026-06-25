@@ -127,7 +127,9 @@ class approvestep_form extends \moodleform {
 
         $a = html_writer::div($label . $select);
         $c = html_writer::div($a, 'btn-group');
-        $d = html_writer::div($c, 'form-inline');
+
+//        $d = html_writer::div($c, 'form-inline');
+        $d = html_writer::div($c, 'd-flex flex-wrap align-items-center');
         $mform->addElement('html', html_writer::div($d, 'buttons'));
         // Since we have more than one form on the page (filter form and this form) a submission runs into a warning
         // because of unsaved data in the other form. In order to suppress this message we disable

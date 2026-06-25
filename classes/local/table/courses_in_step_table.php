@@ -69,7 +69,7 @@ class courses_in_step_table extends \table_sql {
         } else if ($courseid) {
             $this->caption = get_string('coursesinstep', 'tool_lifecycle', $step->instancename)." (1)";
         }
-        $this->captionattributes = ['class' => 'ml-2'];
+        $this->captionattributes = ['class' => 'ms-2'];
 
         $this->define_baseurl($PAGE->url);
         $this->define_columns(['courseid', 'coursefullname', 'startdate', 'tools']);
@@ -194,7 +194,7 @@ class courses_in_step_table extends \table_sql {
             !empty($rollback) ? $rollback : get_string('rollback', 'lifecyclestep_adminapprove'),
             'post',
             single_button::BUTTON_SECONDARY,
-            ['class' => 'mr-1']
+            ['class' => 'me-1']
         );
         $output = $OUTPUT->render($button);
 

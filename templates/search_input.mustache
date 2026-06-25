@@ -41,14 +41,14 @@
 }}
 <div class="simplesearchform {{ extraclasses }}">
     {{^inform}}
-    <form autocomplete="off" action="{{ action }}" method="get" accept-charset="utf-8" class="mform form-inline simplesearchform">
+    <form autocomplete="off" action="{{ action }}" method="get" accept-charset="utf-8" class="mform d-flex flex-wrap align-items-center simplesearchform">
     {{/inform}}
     {{#hiddenfields}}
         <input type="hidden" name="{{ name }}" value="{{ value }}">
     {{/hiddenfields}}
     <div class="input-group">
         <label for="searchinput-{{uniqid}}">
-            <span class="sr-only">{{{ searchstring }}}</span>
+            <span class="visually-hidden">{{{ searchstring }}}</span>
         </label>
         <input type="text"
            id="searchinput-{{uniqid}}"
@@ -64,13 +64,13 @@
         <div class="input-group-append">
             <button type="submit" class="btn {{^btnclass}}btn-submit{{/btnclass}} {{ btnclass }} search-icon">
                 {{#pix}} a/search, core {{/pix}}
-                <span class="sr-only">{{ searchstring }}</span>
+                <span class="visually-hidden">{{ searchstring }}</span>
             </button>
         </div>
 
     </div>
     {{#otherfields}}
-        <div class="ml-2">{{{ otherfields }}}</div>
+        <div class="ms-2">{{{ otherfields }}}</div>
     {{/otherfields}}
 {{^inform}}
     </form>

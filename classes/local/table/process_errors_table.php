@@ -95,7 +95,7 @@ class process_errors_table extends \table_sql {
                         'id' => 'select-all-procerrors',
                         'name' => 'select-all-procerrors',
                         'label' => get_string('selectall'),
-                        'labelclasses' => 'sr-only',
+                        'labelclasses' => 'visually-hidden',
                         'classes' => 'm-1',
                         'checked' => false,
                 ])),

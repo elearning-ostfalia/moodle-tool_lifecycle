@@ -84,7 +84,7 @@ class decision_table extends \table_sql {
             'id' => 'select-all-ids',
             'name' => 'select-all-ids',
             'label' => get_string('selectall'),
-            'labelclasses' => 'sr-only',
+            'labelclasses' => 'visually-hidden',
             'classes' => 'm-1',
             'checked' => false,
         ]);

@@ -211,10 +211,10 @@ class delayed_courses_manager {
         $typehtml = "";
         if ($delaytype == DELAYTYPE_ROLLBACK) {
             $typehtml = $OUTPUT->render(new \pix_icon('e/undo',
-                get_string('rolledback', 'tool_lifecycle'), 'moodle', ['class' => 'ml-1']));
+                get_string('rolledback', 'tool_lifecycle'), 'moodle', ['class' => 'ms-1']));
         } else if ($delaytype == DELAYTYPE_FINISHED) {
             $typehtml = $OUTPUT->render(new \pix_icon('e/tick',
-                get_string('finished', 'tool_lifecycle'), 'moodle', ['class' => 'ml-1']));
+                get_string('finished', 'tool_lifecycle'), 'moodle', ['class' => 'ms-1']));
         }
         return $typehtml;
     }

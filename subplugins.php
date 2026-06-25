@@ -56,7 +56,7 @@ if ($triggers) {
     foreach ($triggers as $trigger => $path) {
         $lib = lib_manager::get_trigger_lib($trigger);
         $triggericon = $lib->get_icon();
-        echo $OUTPUT->pix_icon($triggericon, $trigger, 'moodle', ['class' => 'mr-1']);
+        echo $OUTPUT->pix_icon($triggericon, $trigger, 'moodle', ['class' => 'me-1']);
         echo html_writer::div(get_string('pluginname', 'lifecycletrigger_' . $trigger),
             "font-weight-bold d-inline-block");
         try {
@@ -70,7 +70,7 @@ if ($triggers) {
                 if (lifecycle_is_plugin_installed('semester', 'customfield') === false) {
                     echo \html_writer::span(
                         get_string('customfieldsemesternotinstalled', 'tool_lifecycle', "customfieldsemester"),
-                        'text-danger ml-1');
+                        'text-danger ms-1');
                 }
             }
             echo html_writer::end_div();
@@ -86,7 +86,7 @@ if ($steps) {
     foreach ($steps as $step => $path) {
         $lib = lib_manager::get_step_lib($step);
         $stepicon = $lib->get_icon();
-        echo $OUTPUT->pix_icon($stepicon, $step, 'moodle', ['class' => 'mr-1']);
+        echo $OUTPUT->pix_icon($stepicon, $step, 'moodle', ['class' => 'me-1']);
         echo html_writer::div(get_string('pluginname', 'lifecyclestep_' . $step),
             "font-weight-bold d-inline-block");
         try {

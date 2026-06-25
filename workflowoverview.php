@@ -468,7 +468,7 @@ if ($tablecoursesamount > PAGESIZE ) {
         'action' => (new moodle_url(urls::WORKFLOW_DETAILS))->out(false),
         'uniqid' => 'tool_lifecycle-search-courses',
         'inputname' => 'search',
-        'extraclasses' => 'ml-3 mt-3',
+        'extraclasses' => 'ms-3 mt-3',
         'inform' => false,
         'searchstring' => get_string('searchcourses', 'tool_lifecycle'),
         'query' => $search,

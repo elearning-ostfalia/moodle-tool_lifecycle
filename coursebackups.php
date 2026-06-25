@@ -141,7 +141,7 @@ $filterform->display();
 if ($records) {
 
     echo '<div class="mt-2">';
-    echo \html_writer::span('0', 'totalrows badge badge-primary badge-pill mr-1 mb-1',
+    echo \html_writer::span('0', 'totalrows badge bg-primary rounded-pill me-1 mb-1',
         ['id' => 'createbackup_totalrows']);
     echo \html_writer::span(get_string('coursebackups', 'lifecyclestep_createbackup'));
     echo '</div>';

@@ -106,7 +106,7 @@ class triggered_courses_table_trigger extends \table_sql {
         } else if ($type == 'excluded') {
             $this->caption = get_string('coursesexcluded', 'tool_lifecycle', $a);
         }
-        $this->captionattributes = ['class' => 'ml-3'];
+        $this->captionattributes = ['class' => 'ms-3'];
 
         $columns = ['courseid', 'coursefullname', 'coursecategory', 'status'];
         $this->define_columns($columns);

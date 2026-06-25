@@ -157,7 +157,7 @@ class activity extends base_automatic {
             foreach ($modules as $key => $module) {
                 $activities[$key] = $module->name;
                 if (in_array($key, $triggeractivities)) {
-                    $activitieshtml .= \html_writer::div($module->name, "badge badge-secondary mr-1");
+                    $activitieshtml .= \html_writer::div($module->name, "badge bg-secondary me-1");
                 }
             }
             $mform->insertElementBefore($mform->createElement(

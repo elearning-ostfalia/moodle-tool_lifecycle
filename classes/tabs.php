@@ -66,8 +66,8 @@ class tabs {
             }
         }
 
-        $classnotnull = 'badge badge-primary badge-pill ml-1';
-        $classnull = 'badge badge-secondary badge-pill ml-1';
+        $classnotnull = 'badge bg-primary rounded-pill ms-1';
+        $classnull = 'badge bg-secondary rounded-pill ms-1';
 
         // Get number of drafts.
         $sql = "select count(id)

@@ -3,20 +3,18 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../lib/phpunit/phpunit.xsd"
         bootstrap="../../../../lib/phpunit/bootstrap.php"
-        convertErrorsToExceptions="true"
-        convertNoticesToExceptions="true"
-        convertWarningsToExceptions="true"
         processIsolation="false"
         backupGlobals="false"
-        backupStaticAttributes="false"
         stopOnError="false"
         stopOnFailure="false"
         stopOnIncomplete="false"
         stopOnSkipped="false"
         beStrictAboutTestsThatDoNotTestAnything="false"
-        printerClass="Hint_ResultPrinter"
-        testSuiteLoaderClass="phpunit_autoloader"
-        >
+        displayDetailsOnTestsThatTriggerDeprecations="true"
+        displayDetailsOnTestsThatTriggerErrors="true"
+        displayDetailsOnTestsThatTriggerNotices="true"
+        displayDetailsOnTestsThatTriggerWarnings="true"
+>
 
     <php>
         <!--<const name="PHPUNIT_LONGTEST" value="1"/> uncomment to execute also slow or otherwise expensive tests-->
@@ -31,6 +29,8 @@
         <testsuites>
             <testsuite name="admin_tool_lifecycle_tests_testsuite">
                 <directory suffix="_test.php">.</directory>
+                <directory suffix="_test.php">../step</directory>
+                <directory suffix="_test.php">../trigger</directory>
             </testsuite>
         </testsuites>
         <filter>

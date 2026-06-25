@@ -69,7 +69,7 @@ class courses_in_process_table extends \table_sql {
         $a = new \stdClass();
         $a->title = $workflow->title;
         $this->caption = get_string('coursesinprocess', 'tool_lifecycle', $a);
-        $this->captionattributes = ['class' => 'ml-3'];
+        $this->captionattributes = ['class' => 'ms-3'];
 
         $columns = ['courseid', 'coursefullname', 'coursecategory', 'processtype'];
         $this->define_columns($columns);

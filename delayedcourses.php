@@ -186,8 +186,8 @@ if ($delayedcourses > 0) {
         get_string('delete_all_delays', 'tool_lifecycle'));
     $button->add_confirm_action(get_string('delete_all_confirmation_text', 'tool_lifecycle'));
     echo $OUTPUT->render($button);
-    $classnotnull = 'badge badge-primary badge-pill ml-1';
-    $classnull = 'badge badge-secondary badge-pill ml-1';
+    $classnotnull = 'badge bg-primary rounded-pill ms-1';
+    $classnull = 'badge bg-secondary rounded-pill ms-1';
     echo \html_writer::span($delayedcourses, $delayedcourses > 0 ? $classnotnull : $classnull);
     echo html_writer::div('', 'mb-2');
 }

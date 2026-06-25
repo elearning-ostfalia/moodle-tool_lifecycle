@@ -181,7 +181,7 @@ class opencast extends base_automatic {
             $ltitoolshtml = "";
             foreach ($configuredtools as $key => $tool) {
                 if (in_array($key, $triggerltitools)) {
-                    $ltitoolshtml .= \html_writer::div($tool->name." (".$tool->baseurl.")", "badge badge-secondary mr-1");
+                    $ltitoolshtml .= \html_writer::div($tool->name." (".$tool->baseurl.")", "badge bg-secondary me-1");
                 }
             }
             $mform->insertElementBefore($mform->createElement(

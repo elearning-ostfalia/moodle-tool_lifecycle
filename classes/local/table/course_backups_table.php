@@ -242,7 +242,7 @@ class course_backups_table extends \table_sql {
                 'sesskey' => sesskey(),
                 'name' => 'button_delete_selected',
                 'value' => $this->strings['deleteselectedbuttonlabel'],
-                'class' => 'selectedbutton btn btn-secondary mr-2 mb-1',
+                'class' => 'selectedbutton btn btn-secondary me-2 mb-1',
             ]
         );
 
@@ -259,7 +259,7 @@ class course_backups_table extends \table_sql {
             );
             $button->add_confirm_action(get_string('delete_all_confirmation_text', 'tool_lifecycle'));
             $output .= $OUTPUT->render($button);
-            $output .= \html_writer::span(get_string('deletealldescription', 'tool_lifecycle'), "ml-1");
+            $output .= \html_writer::span(get_string('deletealldescription', 'tool_lifecycle'), "ms-1");
         }
 
         echo $output;

@@ -52,7 +52,7 @@ class course_backups_deletionlog_table extends \table_sql {
 
         $stepname = $DB->get_field('tool_lifecycle_step', 'instancename', ['id' => $stepid]);
         $this->caption = get_string('backupdeletionlogtable', 'lifecyclestep_deletebackup', $stepname);
-        $this->captionattributes = ['class' => 'ml-3'];
+        $this->captionattributes = ['class' => 'ms-3'];
 
         $this->set_sql('b.id, b.courseid, c.shortname as courseshortname,
                 c.fullname as coursefullname, b.files as filesdeleted, b.timestampdeleted',

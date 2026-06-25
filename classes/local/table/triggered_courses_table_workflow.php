@@ -94,7 +94,7 @@ class triggered_courses_table_workflow extends \table_sql {
         $a->title = $workflow->title;
         $this->caption = get_string('coursestriggeredworkflow', 'tool_lifecycle', $a);
         $this->selectable = workflow_manager::is_active($workflow->id);
-        $this->captionattributes = ['class' => 'ml-3'];
+        $this->captionattributes = ['class' => 'ms-3'];
 
         $columns = ['courseid', 'coursefullname', 'coursecategory', 'tools'];
         $this->define_columns($columns);
