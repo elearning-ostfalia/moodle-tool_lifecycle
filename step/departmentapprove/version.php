@@ -15,18 +15,18 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details.
+ * Life Cycle Email Step
  *
- * @package    tool_lifecycle
- * @copyright  2025 Thomas Niedermaier University Münster
+ * @package lifecyclestep_departmentapprove
+ * @copyright  2025 Thomas Niedermaier Universität Münster
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->component = 'tool_lifecycle';
+
+$plugin->version = 2026090800;
+$plugin->requires = 2022112800; // Requires Moodle 4.1+.
+$plugin->component = 'lifecyclestep_departmentapprove';
+$plugin->release   = 'v5.1-r3';
 $plugin->maturity = MATURITY_STABLE;
-$plugin->version  = 2026090800;
-$plugin->requires = 2024100700; // Requires Moodle 4.5+.
-$plugin->supported = [500, 501];
-$plugin->release   = 'v5.1.1-r4 (Ostfalia adminapprove change)';

@@ -15,18 +15,18 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details.
+ * Life Cycle Move Category Step
  *
- * @package    tool_lifecycle
- * @copyright  2025 Thomas Niedermaier University Münster
+ * @package lifecyclestep_moveparentcategory
+ * @copyright  2019 Yorick Reum JMU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->component = 'tool_lifecycle';
-$plugin->maturity = MATURITY_STABLE;
-$plugin->version  = 2026090800;
-$plugin->requires = 2024100700; // Requires Moodle 4.5+.
-$plugin->supported = [500, 501];
-$plugin->release   = 'v5.1.1-r4 (Ostfalia adminapprove change)';
+$plugin->version = 2025102400;
+$plugin->requires = 2022112800; // Requires Moodle 4.1+.
+$plugin->supported = [401, 405];
+$plugin->component = 'lifecyclestep_moveparentcategory';
+$plugin->release   = 'v4.5-r0';
+$plugin->maturity = MATURITY_BETA;

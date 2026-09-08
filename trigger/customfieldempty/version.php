@@ -15,18 +15,19 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details.
+ * Life Cycle Customfield empty Trigger
  *
- * @package    tool_lifecycle
+ * @package lifecycletrigger_customfieldempty
  * @copyright  2025 Thomas Niedermaier University Münster
+ * @copyright  2020 Tobias Reischmann WWU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->component = 'tool_lifecycle';
+$plugin->version = 2026012600;
+$plugin->requires = 2022112800; // Requires Moodle 4.1+.
+$plugin->supported = [405, 500];
+$plugin->component = 'lifecycletrigger_customfieldempty';
+$plugin->release   = 'v4.5-r1';
 $plugin->maturity = MATURITY_STABLE;
-$plugin->version  = 2026090800;
-$plugin->requires = 2024100700; // Requires Moodle 4.5+.
-$plugin->supported = [500, 501];
-$plugin->release   = 'v5.1.1-r4 (Ostfalia adminapprove change)';

@@ -14,19 +14,27 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+namespace lifecyclestep_duplicate2\privacy;
+
+use core_privacy\local\metadata\null_provider;
+
 /**
- * Version details.
+ * Privacy subsystem implementation for lifecyclestep_deletecourse.
  *
- * @package    tool_lifecycle
- * @copyright  2025 Thomas Niedermaier University Münster
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     lifecyclestep_duplicate2
+ * @copyright   2025 Ostfalia
+ * @author      Philipp Memmel
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+class provider implements null_provider {
 
-defined('MOODLE_INTERNAL') || die;
-
-$plugin->component = 'tool_lifecycle';
-$plugin->maturity = MATURITY_STABLE;
-$plugin->version  = 2026090800;
-$plugin->requires = 2024100700; // Requires Moodle 4.5+.
-$plugin->supported = [500, 501];
-$plugin->release   = 'v5.1.1-r4 (Ostfalia adminapprove change)';
+    /**
+     * Get the language string identifier with the component's language
+     * file to explain why this plugin stores no data.
+     *
+     * @return string the reason
+     */
+    public static function get_reason(): string {
+        return 'privacy:metadata';
+    }
+}
