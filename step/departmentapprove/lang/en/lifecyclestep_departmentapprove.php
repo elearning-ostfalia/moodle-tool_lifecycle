@@ -87,3 +87,10 @@ $string['contact_customfield_help'] = 'Contact custom course field, should be ty
 $string['timestamp_customfield'] = 'Department approval custom course field ';
 $string['timestamp_customfield_help'] = 'Custom course field, should be type datetime';
 
+
+$string['requestdata'] = 'Information from course request ({$a})';
+$string['req_withcosts'] = 'Paid course';
+$string['req_partners'] = 'External partners';
+$string['req_foreign'] = 'Externals with residence outside Germany';
+$string['req_noneu'] = 'Externals with residence outside the EU';
+$string['req_countries'] = 'Countries';

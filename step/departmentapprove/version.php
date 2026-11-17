@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die;
 
 
-$plugin->version = 2026090800;
+$plugin->version = 2026111700;
 $plugin->requires = 2022112800; // Requires Moodle 4.1+.
 $plugin->component = 'lifecyclestep_departmentapprove';
 $plugin->release   = 'v5.1-r3';

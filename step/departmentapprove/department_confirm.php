@@ -61,6 +61,37 @@ function update_timestamp(int $instanceid, int $courseid) {
     throw new \coding_exception('could not find custom field ' . $fieldname);
 }
 
+/**
+ * Find the original course request (block_om_course_request) for a course.
+ *
+ * Lookup order:
+ * 1. request that created this course (courseid),
+ * 2. request that continues/repeats this course (courseidold),
+ * 3. approved request with the same shortname (for older requests where courseid was not stored).
+ *
+ * @param stdClass $course
+ * @return stdClass|null
+ */
+function get_course_request_metadata(stdClass $course): ?stdClass {
+    global $DB;
+    $table = 'em_course_request';
+    if (!$DB->get_manager()->table_exists($table)) {
+        return null;
+    }
+    $conditions = [
+        ['courseid' => $course->id],
+        ['courseidold' => $course->id],
+        ['shortname' => $course->shortname, 'approved' => 1],
+    ];
+    foreach ($conditions as $condition) {
+        $requests = $DB->get_records($table, $condition, 'timecreated DESC, id DESC', '*', 0, 1);
+        if ($requests) {
+            return reset($requests);
+        }
+    }
+    return null;
+}
+
 $token   = required_param('token', PARAM_ALPHANUM);
 $reject  = optional_param('reject', 0, PARAM_INT);
 $confirm = optional_param('confirm', '', PARAM_ALPHANUM);   //md5 confirmation hash
@@ -106,7 +137,8 @@ if (!$course) {
 
 $returnurl = new moodle_url($baseurl, ['token' => $token]);
 if (!$rejectform) {
-    $form = new department_confirm_form(action: $returnurl);
+    $courserequest = get_course_request_metadata($course);
+    $form = new department_confirm_form(action: $returnurl, customdata: ['courserequest' => $courserequest]);
 }
 
 $adminuser = core_user::get_noreply_user();

@@ -103,3 +103,9 @@ $string['contact_customfield_help'] = 'Kursfeld sollte Datentyp Text haben und d
 
 $string['timestamp_customfield'] = 'Kursfeld mit Zeitstempel der Bestätigung';
 $string['timestamp_customfield_help'] = 'Kursfeld, in dem der Zeitpunkt der Bestätigung eingetragen werden soll';
+$string['requestdata'] = 'Angaben bei Kursbeantragung ({$a})';
+$string['req_withcosts'] = 'Kostenpflichtiges Angebot';
+$string['req_partners'] = 'Externe Partner';
+$string['req_foreign'] = 'Externe mit Hauptwohnsitz außerhalb Deutschlands';
+$string['req_noneu'] = 'Externe mit Hauptwohnsitz außerhalb der EU';
+$string['req_countries'] = 'Länder';
