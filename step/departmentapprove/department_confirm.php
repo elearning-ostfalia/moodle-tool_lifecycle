@@ -125,6 +125,16 @@ if (!$record) {
     die;
 }
 
+// A request may only be approved or rejected once.
+if ($record->status == departmentapprove::approved || $record->status == departmentapprove::rejected) {
+    $alreadyprocessed = ($record->status == departmentapprove::approved) ? 'alreadyapproved' : 'alreadyrejected';
+    echo $OUTPUT->header();
+    echo $OUTPUT->notification(get_string($alreadyprocessed, 'lifecyclestep_departmentapprove'),
+        \core\output\notification::NOTIFY_WARNING);
+    echo $OUTPUT->footer();
+    die;
+}
+
 $course = get_course($record->courseid);
 if (!$course) {
     // Token is invalid.
