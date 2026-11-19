@@ -104,3 +104,46 @@ Feature: Lifecycle: Department responsible persons can approve courses
   Scenario: Lifecycle: Department opens invalid link
     When I visit "/admin/tool/lifecycle/step/departmentapprove/department_confirm.php?token=123"
     Then I should see "The request has already been processed, or the link is invalid"
+
+  Scenario: Lifecycle: Department is reminded after deadline and can still approve
+    Given the department approval deadline has expired
+    And I log in as "admin"
+    And I run the scheduled task "tool_lifecycle\task\lifecycle_task"
+    # Reminder has been sent and a new deadline has been set.
+    Then the department approval deadline should be in the future
+    And I log out
+
+    # The link is still valid after the reminder.
+    When I visit department approval link
+    Then I should see "Extension of course approval"
+    When I press "Extend approval"
+    Then I should see "The course approval has been extended. The course can continue to be offered."
+
+  @behat_email
+  Scenario: Lifecycle: Reminder mail is repeated to department after each expired deadline
+    Given an email catcher server is configured
+    And I empty the email inbox
+    And I log in as "admin"
+
+    # Deadline not yet expired => no reminder.
+    When I run the scheduled task "tool_lifecycle\task\lifecycle_task"
+    Then user "mail@test.org" should have 0 emails with subject containing "Reminder:"
+    And user "admin" should have 0 emails with subject containing "no response from department"
+
+    # First expiry => first reminder to department, admin is informed.
+    When the department approval deadline has expired
+    And I run the scheduled task "tool_lifecycle\task\lifecycle_task"
+    Then user "mail@test.org" should have 1 email with subject containing "Reminder:"
+    And user "admin" should have 1 email with subject containing "no response from department"
+    And the department approval deadline should be in the future
+
+    # New deadline not yet expired => no further reminder.
+    When I run the scheduled task "tool_lifecycle\task\lifecycle_task"
+    Then user "mail@test.org" should have 1 email with subject containing "Reminder:"
+    And user "admin" should have 1 email with subject containing "no response from department"
+
+    # Second expiry => reminder is repeated, admin is informed again.
+    When the department approval deadline has expired
+    And I run the scheduled task "tool_lifecycle\task\lifecycle_task"
+    Then user "mail@test.org" should have 2 emails with subject containing "Reminder:"
+    And user "admin" should have 2 emails with subject containing "no response from department"
