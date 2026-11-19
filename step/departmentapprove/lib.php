@@ -88,12 +88,7 @@ class departmentapprove extends libbase {
             $record->processid = $processid;
             $record->status = self::initial_state;
             $record->confirmtoken = random_string(32);
-            $settings = settings_manager::get_settings($instanceid, settings_type::STEP);
-            $responsetimeout = (int) ($settings['responsetimeout'] ?? 0);
-            if ($responsetimeout <= 0) {
-                $responsetimeout = self::default_responsetimeout;
-            }
-            $record->confirmtokenexpires = time() + $responsetimeout;
+            $record->confirmtokenexpires = time() + $this->get_responsetimeout($instanceid);
             $record->id = $DB->insert_record('lifecyclestep_departmentapprove', $record);
         }
 
@@ -149,13 +144,23 @@ class departmentapprove extends libbase {
         switch ($record->status) {
             case self::waiting_for_approval:
                 if ($record->confirmtokenexpires < time()) {
-                    // department has not yet confirmed.
+                    // Department has not reacted in time: send a reminder to the department
+                    // (same link, still valid) and inform the admins about it.
+                    // Then restart the deadline, so after each further timeout another reminder is sent.
+                    $this->send_mail($record->contact, $instanceid, $course, $record->confirmtoken, true);
+                    $record->confirmtokenexpires = time() + $this->get_responsetimeout($instanceid);
+                    $DB->update_record('lifecyclestep_departmentapprove', $record);
+
+                    $a = (object) [
+                        'contact' => $record->contact,
+                        'nextdeadline' => userdate($record->confirmtokenexpires, get_string('strftimedate')),
+                    ];
                     $siteadmins = get_admins();
                     foreach ($siteadmins as $siteadmin) {
                         $success = email_to_user($siteadmin,
                                 \core_user::get_noreply_user(),
-                                get_string('admin_subject_no_reaction', 'lifecyclestep_departmentapprove'),
-                                get_string('admin_body_no_reaction', 'lifecyclestep_departmentapprove') .
+                                get_string('admin_subject_no_reaction', 'lifecyclestep_departmentapprove', $a),
+                                get_string('admin_body_no_reaction', 'lifecyclestep_departmentapprove', $a) .
                                 '<br><br>' . $course->fullname);
                     }
                 }
@@ -397,16 +402,35 @@ class departmentapprove extends libbase {
     }
 
     /**
-     * @param \tool_lifecycle\local\entity\step_subplugin $step
-     * @param \moodle_page $PAGE
-     * @param \moodle_database|null $DB
+     * Get the configured response timeout of the step instance in seconds.
+     *
+     * @param int $instanceid id of the step instance
+     * @return int timeout in seconds
+     */
+    protected function get_responsetimeout(int $instanceid): int {
+        $settings = settings_manager::get_settings($instanceid, settings_type::STEP);
+        $responsetimeout = (int) ($settings['responsetimeout'] ?? 0);
+        if ($responsetimeout <= 0) {
+            $responsetimeout = self::default_responsetimeout;
+        }
+        return $responsetimeout;
+    }
+
+    /**
+     * Send the approval request mail to the department.
+     *
+     * @param string $contact email address of the department
+     * @param int $instanceid id of the step instance
+     * @param object $course
+     * @param string $token confirmation token for the link
+     * @param bool $reminder true if this mail is a reminder (subject gets a prefix)
      * @return void
      * @throws \coding_exception
      * @throws \dml_exception
      * @throws \dml_transaction_exception
      * @throws \moodle_exception
      */
-    private function send_mail($contact, $instanceid, $course, $token): void {
+    private function send_mail($contact, $instanceid, $course, $token, bool $reminder = false): void {
         global $PAGE, $CFG;
         $settings = settings_manager::get_settings($instanceid, settings_type::STEP);
         // Set system context, since format_text needs a context.
@@ -427,6 +451,9 @@ class departmentapprove extends libbase {
 
         $parsedsettings = $this->replace_mail_placeholders($settings, [(object) ['courseid' => $course->id]]);
         $subject = $parsedsettings['subject'];
+        if ($reminder) {
+            $subject = get_string('reminder_subject_prefix', 'lifecyclestep_departmentapprove') . $subject;
+        }
         $content = $parsedsettings['content'];
         $contenthtml = $parsedsettings['contenthtml'];
         if (!empty($contenthtml)) {

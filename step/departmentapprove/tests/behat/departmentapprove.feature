@@ -68,13 +68,13 @@ Feature: Lifecycle: Department responsible persons can approve courses
 
   Scenario: Lifecycle: Department approves course
     When I visit department approval link
-    Then I should see "Renewal of course approval"
+    Then I should see "Extension of course approval"
     And the following fields match these values:
       | Course full name | Course 1    |
       | Teachers         | Teacher 1   |
 #      | Course summary   | Test course 1 Lorem ipsum   |
-    When I press "Approve course"
-    Then I should see "The course has been approved and can now continue to be offered."
+    When I press "Extend approval"
+    Then I should see "The course approval has been extended. The course can continue to be offered."
 
     # Check if timestamp is set
     When I log in as "admin"
@@ -87,13 +87,13 @@ Feature: Lifecycle: Department responsible persons can approve courses
 
   Scenario: Lifecycle: Department rejects course request
     When I visit department approval link
-    When I press "Do not approve the course any further..."
+    When I press "Discontinue course offering..."
 
-    Then I should see "Your reasons for rejecting this course"
+    Then I should see "Your reasons for discontinuing the course offering"
     And I set the field "This will be emailed to the course responsible person" to "test"
-    When I press "Reject"
+    When I press "Discontinue course offering"
 
-    Then I should see "The denial of the course approval was forwarded."
+    Then I should see "Your notice that the course offering is to be discontinued was forwarded."
 
     # Check that timestamp is not set
     And I log in as "admin"

@@ -69,7 +69,7 @@ function xmldb_lifecyclestep_departmentapprove_upgrade($oldversion) {
         }
 
         // Savepoint reached.
-        upgrade_plugin_savepoint(true, 2026071600, 'lifecyclestep', 'adminapprove');
+        upgrade_plugin_savepoint(true, 2026071600, 'lifecyclestep', 'departmentapprove');
     }
     return true;
 }

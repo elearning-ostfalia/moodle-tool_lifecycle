@@ -76,10 +76,11 @@ $string['alreadyapproved'] = 'The approval for this course has already been exte
 $string['alreadyrejected'] = 'It has already been reported that this course offering is to be discontinued. It cannot be processed again.';
 $string['admin_subject_rejected'] = 'Open Moodle course offering TO BE DISCONTINUED by department';
 $string['admin_subject_approved'] = 'Open Moodle course approval extended';
-$string['admin_subject_no_reaction'] = 'Open Moodle course approval missing';
+$string['admin_subject_no_reaction'] = 'Open Moodle course approval: no response from department';
 $string['admin_body_rejected'] = 'The department has reported that the course offering is to be discontinued. The following course MUST NOT be offered anymore:';
 $string['admin_body_approved'] = 'The approval has been extended. The following course will continue:';
-$string['admin_body_no_reaction'] = 'The approval for the following course has not yet been extended by the department:';
+$string['admin_body_no_reaction'] = 'The responsible department ({$a->contact}) has not responded to the request for extending the course approval within the deadline. A reminder has just been sent to the department, the link remains valid. If there is no response by {$a->nextdeadline}, another reminder will be sent. The following course is affected:';
+$string['reminder_subject_prefix'] = 'Reminder: ';
 
 $string['coursereasonforrejecting'] = 'Your reasons for discontinuing the course offering';
 $string['coursereasonforrejectingemail'] = 'This will be emailed to the course responsible person';
