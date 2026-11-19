@@ -203,7 +203,7 @@ if ($rejectform || $form->is_cancelled()) {
         $sendmail = email_to_user(
                 user: $departmentuser,
                 from: core_user::get_noreply_user(),
-                subject: get_string('admin_subject_rejected', 'lifecyclestep_departmentapprove'),
+                subject: get_string('course_not_approved', 'lifecyclestep_departmentapprove'),
                 messagetext: get_string('admin_body_rejected', 'lifecyclestep_departmentapprove', $record) .
                 '<br><br>'. $course->fullname,
         );
@@ -215,7 +215,7 @@ if ($rejectform || $form->is_cancelled()) {
             $sendmail = email_to_user(
                     user: \core_user::get_user($roleuser->id),
                     from: core_user::get_noreply_user(),
-                    subject: get_string('admin_subject_rejected', 'lifecyclestep_departmentapprove'),
+                    subject: get_string('course_not_approved', 'lifecyclestep_departmentapprove'),
                     messagetext: $mailtext,
             );
         }

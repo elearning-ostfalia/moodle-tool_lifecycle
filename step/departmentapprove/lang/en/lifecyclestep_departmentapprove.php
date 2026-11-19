@@ -23,8 +23,8 @@
  */
 
 $string['action_prevented_deletion'] = '{$a} prevented deletion';
-$string['course_approved'] = 'Course approved';
-$string['course_not_approved'] = 'Course not approved';
+$string['course_approved'] = 'Course approval extended';
+$string['course_not_approved'] = 'Course offering to be discontinued';
 $string['email_content'] = 'Content plain text template';
 $string['email_content_default'] = 'Dear ...';
 $string['email_content_help'] = 'Set the template for the content of the email (plain text, alternatively you can use HTML template for HTML email below)' . '<p>' . 'You can use the following placeholders:'
@@ -48,7 +48,7 @@ $string['email_content_html_help'] = 'Set the html template for the content of t
 
 $string['email_responsetimeout'] = 'Time the user has for the response';
 $string['email_subject'] = 'Subject template';
-$string['email_subject_default'] = 'Course approval required';
+$string['email_subject_default'] = 'Extension of course approval required';
 $string['email_subject_help'] = 'Set the template for the subject of the email.' . '<p>' . 'You can use the following placeholders:'
         . '<br>' . 'First name of recipient: ##firstname##'
         . '<br>' . 'Last name of recipient: ##lastname##'
@@ -63,25 +63,25 @@ $string['email_sender_help'] = 'Email address used as sender for email so that t
 
 $string['status_message_requiresattention'] = 'Course is marked for approval';
 
-$string['departmentapproval'] = 'Renewal of course approval';
+$string['departmentapproval'] = 'Extension of course approval';
 $string['teachers'] = 'Teachers';
-$string['approve'] = 'Approve course';
-$string['reallyreject'] = 'Is the course "{$a}" really no longer being offered?';
-$string['reject'] = 'Do not approve the course any further';
-$string['rejectedbydepartment'] = 'The denial of the course approval was forwarded.';
-$string['approvedbydepartment'] = 'The course has been approved and can now continue to be offered.';
+$string['approve'] = 'Extend approval';
+$string['reallyreject'] = 'Do you really want to discontinue the course offering "{$a}"?';
+$string['reject'] = 'Discontinue course offering';
+$string['rejectedbydepartment'] = 'Your notice that the course offering is to be discontinued was forwarded.';
+$string['approvedbydepartment'] = 'The course approval has been extended. The course can continue to be offered.';
 $string['invalidtoken'] = 'The request has already been processed, or the link is invalid.';
 $string['invalidcourse'] = 'Course was not found.';
-$string['alreadyapproved'] = 'The course has already been approved. It cannot be processed again.';
-$string['alreadyrejected'] = 'The course approval has already been rejected. It cannot be processed again.';
-$string['admin_subject_rejected'] = 'Open Moodle course approval REJECTED by department';
-$string['admin_subject_approved'] = 'Open Moodle course approval';
+$string['alreadyapproved'] = 'The approval for this course has already been extended. It cannot be processed again.';
+$string['alreadyrejected'] = 'It has already been reported that this course offering is to be discontinued. It cannot be processed again.';
+$string['admin_subject_rejected'] = 'Open Moodle course offering TO BE DISCONTINUED by department';
+$string['admin_subject_approved'] = 'Open Moodle course approval extended';
 $string['admin_subject_no_reaction'] = 'Open Moodle course approval missing';
-$string['admin_body_rejected'] = 'The following course MUST NOT be offered anymore:';
-$string['admin_body_approved'] = 'The following course will continue:';
-$string['admin_body_no_reaction'] = 'The following course is not yet approved by department:';
+$string['admin_body_rejected'] = 'The department has reported that the course offering is to be discontinued. The following course MUST NOT be offered anymore:';
+$string['admin_body_approved'] = 'The approval has been extended. The following course will continue:';
+$string['admin_body_no_reaction'] = 'The approval for the following course has not yet been extended by the department:';
 
-$string['coursereasonforrejecting'] = 'Your reasons for rejecting this course';
+$string['coursereasonforrejecting'] = 'Your reasons for discontinuing the course offering';
 $string['coursereasonforrejectingemail'] = 'This will be emailed to the course responsible person';
 
 $string['contact_customfield'] = 'Contact custom course field ';

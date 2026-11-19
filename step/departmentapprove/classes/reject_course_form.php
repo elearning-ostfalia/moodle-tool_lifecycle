@@ -48,6 +48,6 @@ class reject_course_form extends moodleform {
         $mform->addRule('rejectnotice', get_string('missingreqreason'), 'required', null, 'client');
         $mform->setType('rejectnotice', PARAM_TEXT);
 
-        $this->add_action_buttons(true, get_string('reject'));
+        $this->add_action_buttons(true, get_string('reject', 'lifecyclestep_departmentapprove'));
     }
 }

@@ -49,6 +49,9 @@ class departmentapprove extends libbase {
     const approved = 2;
     const rejected = -10;
 
+    /** @var int Default response timeout in seconds (30 days), used if no timeout is configured. */
+    const default_responsetimeout = 2592000;
+
     /**
      * Processes the course and returns a response.
      * The response tells either
@@ -85,9 +88,12 @@ class departmentapprove extends libbase {
             $record->processid = $processid;
             $record->status = self::initial_state;
             $record->confirmtoken = random_string(32);
-            $expires = new \DateTime('NOW');
-            $expires->add(new \DateInterval('PT30M'));
-            $record->confirmtokenexpires = $expires->getTimestamp();
+            $settings = settings_manager::get_settings($instanceid, settings_type::STEP);
+            $responsetimeout = (int) ($settings['responsetimeout'] ?? 0);
+            if ($responsetimeout <= 0) {
+                $responsetimeout = self::default_responsetimeout;
+            }
+            $record->confirmtokenexpires = time() + $responsetimeout;
             $record->id = $DB->insert_record('lifecyclestep_departmentapprove', $record);
         }
 
@@ -249,7 +255,7 @@ class departmentapprove extends libbase {
         $elementname = 'responsetimeout';
         $mform->addElement('duration', $elementname, get_string('email_responsetimeout', 'lifecyclestep_departmentapprove'));
         $mform->setType($elementname, PARAM_INT);
-        $mform->setDefault('responsetimeout', 2592000);
+        $mform->setDefault('responsetimeout', self::default_responsetimeout);
 
         $elementname = 'subject';
         $mform->addElement('text', $elementname, get_string('email_subject', 'lifecyclestep_departmentapprove'),

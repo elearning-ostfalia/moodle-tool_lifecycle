@@ -23,8 +23,8 @@
  */
 
 $string['action_prevented_deletion'] = '{$a} verhinderte Löschung';
-$string['course_approved'] = 'Kurs bestätigt';
-$string['course_not_approved'] = 'Kurs nicht bestätigt';
+$string['course_approved'] = 'Kursgenehmigung verlängert';
+$string['course_not_approved'] = 'Kursangebot soll eingestellt werden';
 $string['email_content'] = 'Vorlage für Emails in Klartext';
 $string['email_content_default'] = 'Sehr geehrte Dame, sehr geehrter Herr,
 
@@ -64,7 +64,7 @@ $string['email_content_html_help'] = 'Stellen sie die HTML-Vorlage für Emails e
 
 $string['email_responsetimeout'] = 'Zeit, die der Nutzer hat, um zu reagieren';
 $string['email_subject'] = 'Betreffvorlage';
-$string['email_subject_default'] = 'Kursbestätigung erforderlich';
+$string['email_subject_default'] = 'Verlängerung der Kursgenehmigung erforderlich';
 $string['email_subject_help'] = 'Stellen Sie die Vorlage für den Emailbetreff ein.' . '<p>' . 'Sie können die folgenden Platzhalter benutzen:'
         . '<br>' . 'Vorname des Empfängers: ##firstname##'
         . '<br>' . 'Nachname des Empfängers: ##lastname##'
@@ -79,25 +79,25 @@ $string['email_sender_help'] = 'Email-Adresse, an die geantwortet werden soll.';
 
 $string['status_message_requiresattention'] = 'Kurs ist für Bestätigung des Dekanats (oder anderem Zuständigem) vorgemerkt';
 
-$string['departmentapproval'] = 'Erneuerung der Kursgenehmigung';
+$string['departmentapproval'] = 'Verlängerung der Kursgenehmigung';
 $string['teachers'] = 'Lehrende';
-$string['approve'] = 'Kurs genehmigen';
-$string['reallyreject'] = 'Soll der Kurs "{$a}" wirklich nicht mehr weiter angeboten werden?';
-$string['reject'] = 'Kurs nicht weiter genehmigen';
-$string['rejectedbydepartment'] = 'Die Ablehnung der Kursgenehmigung wurde weitergeleitet.';
-$string['approvedbydepartment'] = 'Der Kurs wurde genehmigt und kann nun weiter angeboten werden.';
+$string['approve'] = 'Genehmigung verlängern';
+$string['reallyreject'] = 'Soll das Kursangebot "{$a}" wirklich eingestellt werden?';
+$string['reject'] = 'Kursangebot einstellen';
+$string['rejectedbydepartment'] = 'Die Mitteilung, dass das Kursangebot eingestellt werden soll, wurde weitergeleitet.';
+$string['approvedbydepartment'] = 'Die Kursgenehmigung wurde verlängert. Der Kurs kann weiter angeboten werden.';
 $string['invalidtoken'] = 'Der Antrag wurde bereits bearbeitet oder der Link ist ungültig.';
 $string['invalidcourse'] = 'Der Kurs wurde nicht gefunden.';
-$string['alreadyapproved'] = 'Der Kurs wurde bereits genehmigt. Eine erneute Bearbeitung ist nicht möglich.';
-$string['alreadyrejected'] = 'Die Genehmigung des Kurses wurde bereits abgelehnt. Eine erneute Bearbeitung ist nicht möglich.';
-$string['admin_subject_rejected'] = 'Open Moodle Kursgenehmigung abgelehnt';
-$string['admin_subject_approved'] = 'Open Moodle Kursgenehmigung erteilt';
-$string['admin_body_rejected'] = 'Der folgende Kurs darf in Open Moodle NICHT mehr angeboten werden. 
-Die zuständige Einrichtung ({$a->contact}) hat die Genehmigung soeben widerrufen.';
-$string['admin_body_approved'] = 'Der folgende Kurs wird in Open Moodle fortgeführt. 
-Die Genehmigung der Einrichtung wurde soeben erteilt. ';
+$string['alreadyapproved'] = 'Die Genehmigung für diesen Kurs wurde bereits verlängert. Eine erneute Bearbeitung ist nicht möglich.';
+$string['alreadyrejected'] = 'Für diesen Kurs wurde bereits mitgeteilt, dass das Kursangebot eingestellt werden soll. Eine erneute Bearbeitung ist nicht möglich.';
+$string['admin_subject_rejected'] = 'Open Moodle Kursangebot einstellen';
+$string['admin_subject_approved'] = 'Open Moodle Kursgenehmigung verlängert';
+$string['admin_body_rejected'] = 'Wir möchten Sie darüber informieren, dass der folgende Kurs in Open Moodle nicht weiter angeboten werden kann. 
+Die zuständige Einrichtung ({$a->contact}) hat soeben mitgeteilt, dass das Kursangebot eingestellt werden soll.';
+$string['admin_body_approved'] = 'Der folgende Kurs kann in Open Moodle fortgeführt werden. 
+Die zuständige Einrichtung hat die Genehmigung soeben verlängert. ';
 
-$string['coursereasonforrejecting'] = 'Begründung für das Ablehnen der Genehmigung';
+$string['coursereasonforrejecting'] = 'Begründung für die Einstellung des Kursangebots';
 $string['coursereasonforrejectingemail'] = 'Die Mitteilung wird an die Person gesendet, die für den Kurs verantwortlich ist';
 
 $string['contact_customfield'] = 'Kursfeld mit der Mail der Einrichtung';
