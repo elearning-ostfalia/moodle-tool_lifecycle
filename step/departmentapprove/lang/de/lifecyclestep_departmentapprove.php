@@ -95,8 +95,16 @@ $string['admin_subject_approved'] = 'Open Moodle Kursgenehmigung verlängert';
 $string['admin_subject_no_reaction'] = 'Open Moodle Kursgenehmigung: keine Rückmeldung der Einrichtung';
 $string['admin_body_no_reaction'] = 'Die zuständige Einrichtung ({$a->contact}) hat innerhalb der Frist nicht auf die Anfrage zur Verlängerung der Kursgenehmigung reagiert. Soeben wurde eine Erinnerung an die Einrichtung verschickt, der Link bleibt weiterhin gültig. Erfolgt bis zum {$a->nextdeadline} keine Rückmeldung, wird eine weitere Erinnerung verschickt. Betroffen ist der folgende Kurs:';
 $string['reminder_subject_prefix'] = 'Erinnerung: ';
-$string['admin_body_rejected'] = 'Wir möchten Sie darüber informieren, dass der folgende Kurs in Open Moodle nicht weiter angeboten werden kann. 
-Die zuständige Einrichtung ({$a->contact}) hat soeben mitgeteilt, dass das Kursangebot eingestellt werden soll.';
+$string['admin_body_rejected'] = 'Wir möchten Sie darüber informieren, dass der folgende Kurs in Open Moodle nicht weiter angeboten werden kann:
+
+    {$a->fullname}<br>
+    {$a->url}
+    
+Die zuständige Einrichtung hat soeben mitgeteilt, dass das Kursangebot eingestellt werden soll. Als Begründung wurde angegeben:<br><br>
+
+<i>{$a->reason}</i><br>
+
+Die Mailadresse der Einrichtung ist {$a->contact}.';
 $string['admin_body_approved'] = 'Der folgende Kurs kann in Open Moodle fortgeführt werden. 
 Die zuständige Einrichtung hat die Genehmigung soeben verlängert. ';
 

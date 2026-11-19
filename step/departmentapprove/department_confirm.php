@@ -189,9 +189,13 @@ if ($rejectform || $form->is_cancelled()) {
 	    $record->status = departmentapprove::rejected;
 	    $DB->update_record('lifecyclestep_departmentapprove', $record);
 
-	    $url = new moodle_url('/course/view.php', ['id' => $course->id]);
-        $mailtext = get_string('admin_body_rejected', 'lifecyclestep_departmentapprove', $record) .
-                '<br><br>'. $course->fullname . '<br>' . $url;
+        $a = new stdClass();
+        $a->fullname = $course->fullname;
+        $a->contact = $record->contact;
+        $a->reason = $data->rejectnotice;
+        $url = new moodle_url('/course/view.php', ['id' => $course->id]);
+        $a->url = $url->out() . '<br>';
+        $mailtext = get_string('admin_body_rejected', 'lifecyclestep_departmentapprove', $a);
         // Send email to admin.
 	    $sendmail = email_to_user(
 	        user: $adminuser,
@@ -199,26 +203,26 @@ if ($rejectform || $form->is_cancelled()) {
 	        subject: get_string('admin_subject_rejected', 'lifecyclestep_departmentapprove'),
 	        messagetext: $mailtext,
 	    );
-        // Send mail to department.
-        $sendmail = email_to_user(
-                user: $departmentuser,
-                from: core_user::get_noreply_user(),
-                subject: get_string('course_not_approved', 'lifecyclestep_departmentapprove'),
-                messagetext: get_string('admin_body_rejected', 'lifecyclestep_departmentapprove', $record) .
-                '<br><br>'. $course->fullname,
-        );
-
         // Send email to teachers.
         $context  = context_course::instance($record->courseid);
         $roleusers = get_role_users($roleid, $context, false, 'u.id, u.lastname, u.firstname');
         foreach ($roleusers as $roleuser) {
             $sendmail = email_to_user(
-                    user: \core_user::get_user($roleuser->id),
-                    from: core_user::get_noreply_user(),
-                    subject: get_string('course_not_approved', 'lifecyclestep_departmentapprove'),
-                    messagetext: $mailtext,
+                user: \core_user::get_user($roleuser->id),
+                from: core_user::get_noreply_user(),
+                subject: get_string('course_not_approved', 'lifecyclestep_departmentapprove'),
+                messagetext: $mailtext,
             );
         }
+        // Send mail to department.
+        $a->url = ''; // no URL.
+        $mailtext = get_string('admin_body_rejected', 'lifecyclestep_departmentapprove', $a);
+        $sendmail = email_to_user(
+                user: $departmentuser,
+                from: core_user::get_noreply_user(),
+                subject: get_string('course_not_approved', 'lifecyclestep_departmentapprove'),
+                messagetext: $mailtext,
+        );
 
         echo $OUTPUT->header();
         echo $OUTPUT->notification(get_string('rejectedbydepartment', 'lifecyclestep_departmentapprove'),
