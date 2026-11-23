@@ -204,3 +204,30 @@ Feature: Lifecycle: Department responsible persons can approve courses
     When I run the scheduled task "tool_lifecycle\task\lifecycle_task"
     Then the course "C2" should not be in a lifecycle process
     And the course "C2" should be delayed for workflow "Department approval" because of rollback
+
+  Scenario: Lifecycle: Manually proceeded process is only delayed when it ends
+    When I log in as "admin"
+    And I select the course "C2" in the workflow overview of "Department approval"
+    Then the course "C2" should be in the lifecycle step "Department approval"
+
+    # Proceed to a further step: the process is not finished, so the course must not be delayed.
+    When I proceed the process of course "C2" in the workflow overview of "Department approval"
+    Then I should see "One course has been proceeded."
+    And the course "C2" should be in the lifecycle step "Make invisible"
+    And the course "C2" should not be delayed for workflow "Department approval"
+
+    # Proceed after the last step: the process is finished and the finish delay is set.
+    When I proceed the process of course "C2" in the workflow overview of "Department approval"
+    Then I should see "One course has been proceeded."
+    And the course "C2" should not be in a lifecycle process
+    And the course "C2" should be delayed for workflow "Department approval" because of finish
+
+  Scenario: Lifecycle: Manually rolled back process is delayed because of rollback
+    When I log in as "admin"
+    And I select the course "C2" in the workflow overview of "Department approval"
+    And I rollback the process of course "C2" in the workflow overview of "Department approval"
+    Then I should see "One course has been rolled back."
+    And the course "C2" should not be in a lifecycle process
+    # The finish delay (2) is longer than the rollback delay (1): if a finish delay had been set
+    # when the course was selected, the delay type would still be "finish".
+    And the course "C2" should be delayed for workflow "Department approval" because of rollback

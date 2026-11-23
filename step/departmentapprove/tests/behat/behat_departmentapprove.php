@@ -79,6 +79,50 @@ class behat_departmentapprove extends behat_base {
     }
 
     /**
+     * Proceed or roll back the process of a course by the actions in the workflow overview
+     * (admin must be logged in).
+     *
+     * @When /^I (?P<action_string>proceed|rollback) the process of course "(?P<course_string>(?:[^"]|\\")*)" in the workflow overview of "(?P<workflow_string>(?:[^"]|\\")*)"$/
+     * @param string $action 'proceed' or 'rollback'
+     * @param string $shortname course shortname
+     * @param string $workflowtitle workflow title
+     */
+    public function i_proceed_or_rollback_the_process_in_the_workflow_overview(string $action, string $shortname,
+            string $workflowtitle) {
+        global $DB;
+        $workflowid = $DB->get_field('tool_lifecycle_workflow', 'id', ['title' => $workflowtitle], MUST_EXIST);
+        $processid = $DB->get_field('tool_lifecycle_process', 'id',
+            ['courseid' => $this->get_course_id($shortname), 'workflowid' => $workflowid]);
+        if (!$processid) {
+            throw new ExpectationException("Course {$shortname} is not in a process of workflow {$workflowtitle}",
+                $this->getSession());
+        }
+        $this->execute('behat_general::i_visit', '/admin/tool/lifecycle/workflowoverview.php?wf=' . $workflowid .
+            '&action=' . $action . '&processid=' . $processid);
+    }
+
+    /**
+     * Check that the process of a course is at the given step.
+     *
+     * @Then /^the course "(?P<course_string>(?:[^"]|\\")*)" should be in the lifecycle step "(?P<step_string>(?:[^"]|\\")*)"$/
+     * @param string $shortname course shortname
+     * @param string $stepname instance name of the step
+     */
+    public function the_course_should_be_in_the_lifecycle_step(string $shortname, string $stepname) {
+        global $DB;
+        $process = $DB->get_record('tool_lifecycle_process', ['courseid' => $this->get_course_id($shortname)]);
+        if (!$process) {
+            throw new ExpectationException("Course {$shortname} is not in a lifecycle process", $this->getSession());
+        }
+        $currentstep = $DB->get_field('tool_lifecycle_step', 'instancename',
+            ['workflowid' => $process->workflowid, 'sortindex' => $process->stepindex]);
+        if ($currentstep !== $stepname) {
+            throw new ExpectationException("Course {$shortname} is in step \"{$currentstep}\", expected \"{$stepname}\"",
+                $this->getSession());
+        }
+    }
+
+    /**
      * Simulate that the response deadline of all pending department approvals has expired.
      *
      * @Given /^the department approval deadline has expired$/

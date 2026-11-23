@@ -43,6 +43,7 @@ $renderer = $PAGE->get_renderer('tool_lifecycle');
 $heading = get_string('pluginname', 'tool_lifecycle')." / ".get_string('pluginname',
         'lifecyclestep_adminapprove');
 echo $renderer->header($heading);
+$PAGE->set_heading($SITE->fullname);
 $tabrow = tabs::get_tabrow();
 $renderer->tabs($tabrow, 'adminapprove');
 
