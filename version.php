@@ -29,4 +29,4 @@ $plugin->maturity = MATURITY_STABLE;
 $plugin->version  = 2026112300;
 $plugin->requires = 2024100700; // Requires Moodle 4.5+.
 $plugin->supported = [500, 501];
-$plugin->release   = 'v5.1.1-r4-04 (Ostfalia version)';
+$plugin->release   = 'v5.1.1-r4-05 (Ostfalia version)';
