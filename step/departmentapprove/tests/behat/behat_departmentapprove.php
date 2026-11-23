@@ -121,4 +121,104 @@ class behat_departmentapprove extends behat_base {
         }
     }
 
+    /**
+     * Check that a course is currently delayed for a workflow (or globally) with the given delay type.
+     *
+     * @Then /^the course "(?P<course_string>(?:[^"]|\\")*)" should be delayed for workflow "(?P<workflow_string>(?:[^"]|\\")*)" because of (?P<type_string>rollback|finish)$/
+     * @param string $shortname course shortname
+     * @param string $workflowtitle workflow title
+     * @param string $type 'rollback' or 'finish'
+     */
+    public function the_course_should_be_delayed_for_workflow_because_of(string $shortname, string $workflowtitle,
+            string $type) {
+        // Autoload the manager, which defines the DELAYTYPE_* constants.
+        class_exists(\tool_lifecycle\local\manager\delayed_courses_manager::class);
+        $delay = $this->get_active_delay($shortname, $workflowtitle);
+        if (!$delay) {
+            throw new ExpectationException("Course {$shortname} is not delayed for workflow {$workflowtitle}",
+                $this->getSession());
+        }
+        $expectedtype = ($type === 'rollback') ? DELAYTYPE_ROLLBACK : DELAYTYPE_FINISHED;
+        if ((int) $delay->delaytype !== $expectedtype) {
+            throw new ExpectationException("Course {$shortname} is delayed with delay type {$delay->delaytype}, " .
+                "expected {$expectedtype} ({$type})", $this->getSession());
+        }
+    }
+
+    /**
+     * Check that a course is currently not delayed for a workflow (nor globally).
+     *
+     * @Then /^the course "(?P<course_string>(?:[^"]|\\")*)" should not be delayed for workflow "(?P<workflow_string>(?:[^"]|\\")*)"$/
+     * @param string $shortname course shortname
+     * @param string $workflowtitle workflow title
+     */
+    public function the_course_should_not_be_delayed_for_workflow(string $shortname, string $workflowtitle) {
+        $delay = $this->get_active_delay($shortname, $workflowtitle);
+        if ($delay) {
+            throw new ExpectationException("Course {$shortname} is delayed for workflow {$workflowtitle} until " .
+                userdate($delay->delayeduntil), $this->getSession());
+        }
+    }
+
+    /**
+     * Check that a course has no running lifecycle process.
+     *
+     * @Then /^the course "(?P<course_string>(?:[^"]|\\")*)" should not be in a lifecycle process$/
+     * @param string $shortname course shortname
+     */
+    public function the_course_should_not_be_in_a_lifecycle_process(string $shortname) {
+        global $DB;
+        $courseid = $this->get_course_id($shortname);
+        if ($DB->record_exists('tool_lifecycle_process', ['courseid' => $courseid])) {
+            throw new ExpectationException("Course {$shortname} is still in a lifecycle process", $this->getSession());
+        }
+    }
+
+    /**
+     * Check the visibility of a course.
+     *
+     * @Then /^the course "(?P<course_string>(?:[^"]|\\")*)" should be (?P<visibility_string>visible|invisible)$/
+     * @param string $shortname course shortname
+     * @param string $visibility 'visible' or 'invisible'
+     */
+    public function the_course_should_be_visible(string $shortname, string $visibility) {
+        global $DB;
+        $visible = (int) $DB->get_field('course', 'visible', ['id' => $this->get_course_id($shortname)], MUST_EXIST);
+        if ($visible !== (int) ($visibility === 'visible')) {
+            throw new ExpectationException("Course {$shortname} is not {$visibility}", $this->getSession());
+        }
+    }
+
+    /**
+     * Get the currently active delay of a course for a workflow (workflow specific or global).
+     *
+     * @param string $shortname course shortname
+     * @param string $workflowtitle workflow title
+     * @return stdClass|null delay record or null if the course is not delayed
+     */
+    private function get_active_delay(string $shortname, string $workflowtitle): ?stdClass {
+        global $DB;
+        $courseid = $this->get_course_id($shortname);
+        $workflowid = $DB->get_field('tool_lifecycle_workflow', 'id', ['title' => $workflowtitle], MUST_EXIST);
+        $select = 'courseid = :courseid AND delayeduntil > :now';
+        $params = ['courseid' => $courseid, 'now' => time()];
+        $delays = $DB->get_records_select('tool_lifecycle_delayed_workf', $select . ' AND workflowid = :workflowid',
+            $params + ['workflowid' => $workflowid]);
+        // Records of both tables may share the same id, so do not merge by key.
+        $delays = array_merge(array_values($delays),
+            array_values($DB->get_records_select('tool_lifecycle_delayed', $select, $params)));
+        return $delays ? reset($delays) : null;
+    }
+
+    /**
+     * Get the id of a course by its shortname.
+     *
+     * @param string $shortname course shortname
+     * @return int course id
+     */
+    private function get_course_id(string $shortname): int {
+        global $DB;
+        return (int) $DB->get_field('course', 'id', ['shortname' => $shortname], MUST_EXIST);
+    }
+
 }

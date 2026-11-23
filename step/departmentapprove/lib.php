@@ -168,11 +168,11 @@ class departmentapprove extends libbase {
             case self::approved:
                 mtrace("handle approved course");
                 $DB->delete_records('lifecyclestep_departmentapprove', ['processid' => $processid]);
-                return step_response::proceed();
+                return step_response::rollback();
             case self::rejected:
                 mtrace("handle rejected course");
                 $DB->delete_records('lifecyclestep_departmentapprove', ['processid' => $processid]);
-                return step_response::rollback();
+                return step_response::proceed();
             default:
                 mtrace("keep on waiting");
                 return step_response::waiting();

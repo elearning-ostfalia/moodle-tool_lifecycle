@@ -50,6 +50,10 @@ Feature: Lifecycle: Department responsible persons can approve courses
       | Reply-to email address | xyz@test.org        |
       | Content HTML Template  | testing        |
     And I press "Save changes"
+    # Follow-up step: it is only reached if the department rejects the course.
+    And I select "Make Course Invisible Step" from the "tool_lifecycle-choose-step" singleselect
+    And I set the field "Instance name" to "Make invisible"
+    And I press "Save changes"
     And I am on workflowdrafts page
     And I press "Activate"
     And I log out
@@ -147,3 +151,32 @@ Feature: Lifecycle: Department responsible persons can approve courses
     And I run the scheduled task "tool_lifecycle\task\lifecycle_task"
     Then user "mail@test.org" should have 2 emails with subject containing "Reminder:"
     And user "admin" should have 2 emails with subject containing "no response from department"
+
+  Scenario: Lifecycle: Approval ends the process and delays the course
+    # Entering the step must not delay the course.
+    Then the course "C1" should not be delayed for workflow "Department approval"
+    When I visit department approval link
+    And I press "Extend approval"
+    Then I should see "The course approval has been extended. The course can continue to be offered."
+
+    When I log in as "admin"
+    And I run the scheduled task "tool_lifecycle\task\lifecycle_task"
+    Then the course "C1" should not be in a lifecycle process
+    And the course "C1" should be delayed for workflow "Department approval" because of rollback
+    # The follow-up step has not been executed.
+    And the course "C1" should be visible
+
+  Scenario: Lifecycle: Rejection continues the process with the next step
+    Then the course "C1" should not be delayed for workflow "Department approval"
+    When I visit department approval link
+    And I press "Discontinue course offering..."
+    And I set the field "This will be emailed to the course responsible person" to "test"
+    And I press "Discontinue course offering"
+    Then I should see "Your notice that the course offering is to be discontinued was forwarded."
+
+    When I log in as "admin"
+    And I run the scheduled task "tool_lifecycle\task\lifecycle_task"
+    # The follow-up step "Make invisible" has been executed and finished the workflow.
+    Then the course "C1" should be invisible
+    And the course "C1" should not be in a lifecycle process
+    And the course "C1" should be delayed for workflow "Department approval" because of finish
