@@ -132,7 +132,8 @@ if ($action) {
         $process = process_manager::create_process($cid, $workflow->id);
         process_triggered::event_from_process($process)->trigger();
         process_manager::proceed_process($process);
-        delayed_courses_manager::set_course_delayed_for_workflow($process->courseid, false, $workflow);
+        // No delay here: as for processes started by the cron, the delay is set when the process ends
+        // (finish or rollback). A course with a running process is not triggered again anyway.
         $msg = get_string('courseselected', 'tool_lifecycle');
     } else if ($action == 'deletedelay') {
         $cid = required_param('cid', PARAM_INT);
@@ -154,8 +155,10 @@ if ($action) {
                 delayed_courses_manager::set_course_delayed_for_workflow($process->courseid, true, $workflow);
                 $msg = get_string('courserolledback', 'tool_lifecycle');
             } else if ($action === 'proceed') {
-                process_manager::proceed_process($process);
-                delayed_courses_manager::set_course_delayed_for_workflow($process->courseid, false, $workflow);
+                if (!process_manager::proceed_process($process)) {
+                    // Only delay if the process has finished (no further step), as in processor::process_courses().
+                    delayed_courses_manager::set_course_delayed_for_workflow($process->courseid, false, $workflow);
+                }
                 $msg = get_string('courseproceeded', 'tool_lifecycle');
             } else {
                 throw new coding_exception('processid was specified but action was neither "rollback" nor "proceed"!');

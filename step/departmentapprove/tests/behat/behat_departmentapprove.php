@@ -48,6 +48,37 @@ class behat_departmentapprove extends behat_base {
     }
 
     /**
+     * open link as department person for a specific course
+     *
+     * @When /^I visit department approval link for course "(?P<course_string>(?:[^"]|\\")*)"$/
+     * @param string $shortname course shortname
+     */
+    public function i_visit_department_approval_link_for_course(string $shortname) {
+        global $DB;
+        $token = $DB->get_field('lifecyclestep_departmentapprove', 'confirmtoken',
+            ['courseid' => $this->get_course_id($shortname)]);
+        if (!$token) {
+            throw new ExpectationException("No approval record found for course {$shortname}", $this->getSession());
+        }
+        $this->execute('behat_general::i_visit',
+            '/admin/tool/lifecycle/step/departmentapprove/department_confirm.php?token=' . $token);
+    }
+
+    /**
+     * Start a process for a course by the "Select" action in the workflow overview (admin must be logged in).
+     *
+     * @When /^I select the course "(?P<course_string>(?:[^"]|\\")*)" in the workflow overview of "(?P<workflow_string>(?:[^"]|\\")*)"$/
+     * @param string $shortname course shortname
+     * @param string $workflowtitle workflow title
+     */
+    public function i_select_the_course_in_the_workflow_overview(string $shortname, string $workflowtitle) {
+        global $DB;
+        $workflowid = $DB->get_field('tool_lifecycle_workflow', 'id', ['title' => $workflowtitle], MUST_EXIST);
+        $this->execute('behat_general::i_visit', '/admin/tool/lifecycle/workflowoverview.php?wf=' . $workflowid .
+            '&action=select&cid=' . $this->get_course_id($shortname));
+    }
+
+    /**
      * Simulate that the response deadline of all pending department approvals has expired.
      *
      * @Given /^the department approval deadline has expired$/
@@ -216,7 +247,7 @@ class behat_departmentapprove extends behat_base {
      * @param string $shortname course shortname
      * @return int course id
      */
-    private function get_course_id(string $shortname): int {
+    protected function get_course_id(string $shortname): int {
         global $DB;
         return (int) $DB->get_field('course', 'id', ['shortname' => $shortname], MUST_EXIST);
     }

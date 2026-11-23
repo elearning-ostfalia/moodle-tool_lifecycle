@@ -23,6 +23,7 @@ Feature: Lifecycle: Department responsible persons can approve courses
     And the following "courses" exist:
       | fullname | shortname | category | groupmode | customfield_contact |
       | Course 1 | C1        | 0        | 1         | mail@test.org       |
+      | Course 2 | C2        | 0        | 1         | mail2@test.org      |
     And the following "course enrolments" exist:
       | user | course | role |
       | teacher1 | C1 | editingteacher |
@@ -186,3 +187,20 @@ Feature: Lifecycle: Department responsible persons can approve courses
     Then the course "C1" should be invisible
     And the course "C1" should not be in a lifecycle process
     And the course "C1" should be delayed for workflow "Department approval" because of finish
+
+  Scenario: Lifecycle: Manually selected course is not delayed before the process ends
+    When I log in as "admin"
+    And I select the course "C2" in the workflow overview of "Department approval"
+    Then I should see "One course has been added to the process."
+    # Starting the process must not delay the course (same as a process started by the cron).
+    And the course "C2" should not be delayed for workflow "Department approval"
+
+    When I run the scheduled task "tool_lifecycle\task\lifecycle_task"
+    Then the course "C2" should not be delayed for workflow "Department approval"
+    When I visit department approval link for course "C2"
+    And I press "Extend approval"
+    Then I should see "The course approval has been extended. The course can continue to be offered."
+
+    When I run the scheduled task "tool_lifecycle\task\lifecycle_task"
+    Then the course "C2" should not be in a lifecycle process
+    And the course "C2" should be delayed for workflow "Department approval" because of rollback
