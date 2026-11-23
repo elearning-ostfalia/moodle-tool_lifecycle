@@ -176,6 +176,12 @@ Feature: Lifecycle: Department responsible persons can approve courses
 
     When I log in as "admin"
     And I run the scheduled task "tool_lifecycle\task\lifecycle_task"
+    # The rejection is handled: the process proceeds to the next step, which is executed by the next cron run
+    # (the processor only handles one step per process and run).
+    Then the course "C1" should be visible
+    And the course "C1" should not be delayed for workflow "Department approval"
+
+    When I run the scheduled task "tool_lifecycle\task\lifecycle_task"
     # The follow-up step "Make invisible" has been executed and finished the workflow.
     Then the course "C1" should be invisible
     And the course "C1" should not be in a lifecycle process
