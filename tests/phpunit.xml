@@ -33,13 +33,14 @@
                 <directory suffix="_test.php">../trigger</directory>
             </testsuite>
         </testsuites>
-        <filter>
-            <whitelist processUncoveredFilesFromWhitelist="false">
-                <directory suffix=".php">.</directory>
-                <exclude>
-                    <directory suffix="_test.php">.</directory>
-                </exclude>
-            </whitelist>
-        </filter>
+        <source>
+            <include>
+                <directory suffix=".php">..</directory>
+            </include>
+            <exclude>
+                <directory>../tests</directory>
+                <directory suffix="_test.php">..</directory>
+            </exclude>
+        </source>
 
 </phpunit>
